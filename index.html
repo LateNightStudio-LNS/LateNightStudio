@@ -2,50 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>LateNight Studio | Home</title>
 
+
     <style>
+
+        /* =====================================================
+           RESET
+           ===================================================== */
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
             background: #000;
             color: #fff;
+
             font-family: sans-serif;
+
             overflow-x: hidden;
         }
 
+
         .page-container {
-            width: 100vw;
+            width: 100%;
             min-height: 100vh;
         }
 
-        /* =========================
-           COLLAPSIBLE SIDEBAR
-           ========================= */
+
+
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
 
         .sidebar {
+
             --sidebar-width: 72px;
             --expanded-width: 280px;
 
             position: fixed;
-            z-index: 1000;
-            left: 0;
+
             top: 0;
+            left: 0;
 
             width: var(--sidebar-width);
             height: 100vh;
 
+            z-index: 1000;
+
             background: #000;
-            border-right: 1px solid rgba(255, 255, 255, 0.18);
+
+            border-right:
+                1px solid rgba(255, 255, 255, 0.18);
 
             overflow: hidden;
 
@@ -54,24 +76,52 @@
                 box-shadow 0.55s ease;
         }
 
-        /* Expand when hovered */
-        .sidebar:hover {
-            width: var(--expanded-width);
-            box-shadow: 12px 0 35px rgba(0, 0, 0, 0.45);
+
+
+        /* =====================================================
+           DESKTOP HOVER
+
+           Only devices with an actual mouse get hover behavior.
+           ===================================================== */
+
+        @media (hover: hover) and (pointer: fine) {
+
+            .sidebar:hover {
+
+                width: var(--expanded-width);
+
+                box-shadow:
+                    12px 0 35px rgba(0, 0, 0, 0.45);
+            }
+
         }
 
-        /* Stay expanded after clicking */
-        .sidebar.expanded {
-            width: var(--expanded-width);
-            box-shadow: 12px 0 35px rgba(0, 0, 0, 0.45);
+
+
+        /* =====================================================
+           MOBILE / TOUCH OPEN STATE
+           ===================================================== */
+
+        @media (hover: none) {
+
+            .sidebar.expanded {
+
+                width: var(--expanded-width);
+
+                box-shadow:
+                    12px 0 35px rgba(0, 0, 0, 0.55);
+            }
+
         }
 
 
-        /* =========================
-           SIDEBAR BUTTON
-           ========================= */
+
+        /* =====================================================
+           SIDEBAR TOGGLE
+           ===================================================== */
 
         .sidebar-toggle {
+
             position: absolute;
 
             top: 16px;
@@ -80,34 +130,62 @@
             width: 42px;
             height: 42px;
 
-            border: none;
-            outline: none;
             padding: 0;
 
+            border: none;
+            outline: none;
+
             background: transparent;
+
             cursor: pointer;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
+            z-index: 20;
+
             transition:
-                left 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                top 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        /* Move button to top-right when expanded */
-        .sidebar:hover .sidebar-toggle,
-        .sidebar.expanded .sidebar-toggle {
-            left: calc(var(--expanded-width) - 58px);
+                left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
 
-        /* =========================
-           LOGO
-           ========================= */
+
+        /* Desktop: move arrow to top-right when hovered */
+
+        @media (hover: hover) and (pointer: fine) {
+
+            .sidebar:hover .sidebar-toggle {
+
+                left:
+                    calc(var(--expanded-width) - 58px);
+            }
+
+        }
+
+
+
+        /* Mobile: move arrow when clicked open */
+
+        @media (hover: none) {
+
+            .sidebar.expanded .sidebar-toggle {
+
+                left:
+                    calc(var(--expanded-width) - 58px);
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SIDEBAR LOGO
+           ===================================================== */
 
         .sidebar-logo {
+
             width: 27px;
             height: 27px;
 
@@ -117,250 +195,654 @@
 
             transition:
                 opacity 0.3s ease,
-                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        /* Hide logo when expanded */
-        .sidebar:hover .sidebar-logo,
-        .sidebar.expanded .sidebar-logo {
-            opacity: 0;
-            transform: scale(0.7);
+                transform 0.55s
+                cubic-bezier(0.22, 1, 0.36, 1);
         }
 
 
-        /* =========================
-           ARROW
-           ========================= */
+
+        /* Hide logo when sidebar opens */
+
+        @media (hover: hover) and (pointer: fine) {
+
+            .sidebar:hover .sidebar-logo {
+
+                opacity: 0;
+
+                transform: scale(0.7);
+            }
+
+        }
+
+
+        @media (hover: none) {
+
+            .sidebar.expanded .sidebar-logo {
+
+                opacity: 0;
+
+                transform: scale(0.7);
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SIDEBAR ARROW
+           ===================================================== */
 
         .sidebar-arrow {
+
             position: absolute;
 
-            width: 18px;
-            height: 18px;
+            width: 19px;
+            height: 19px;
 
             object-fit: contain;
 
-            opacity: 0;
-
             /*
-                Your PNG points LEFT.
-                Rotating it 180 degrees makes it point RIGHT.
+                Your arrow PNG points LEFT by default.
+
+                180deg rotation = RIGHT
+                0deg rotation   = LEFT
             */
+
             transform: rotate(180deg);
 
+            opacity: 1;
+
             transition:
-                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.2s ease;
-        }
-
-        /* Show arrow while collapsed */
-        .sidebar:not(:hover):not(.expanded) .sidebar-arrow {
-            opacity: 1;
-        }
-
-        /* When expanded, rotate arrow back 180 degrees */
-        .sidebar:hover .sidebar-arrow,
-        .sidebar.expanded .sidebar-arrow {
-            opacity: 1;
-            transform: rotate(0deg);
+                transform 0.55s
+                cubic-bezier(0.22, 1, 0.36, 1);
         }
 
 
-        /* =========================
-           EXPANDED SIDEBAR CONTENT
-           ========================= */
+
+        /* Desktop open */
+
+        @media (hover: hover) and (pointer: fine) {
+
+            .sidebar:hover .sidebar-arrow {
+
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+
+        /* Mobile open */
+
+        @media (hover: none) {
+
+            .sidebar.expanded .sidebar-arrow {
+
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SIDEBAR CONTENT
+           ===================================================== */
 
         .sidebar-content {
+
             position: absolute;
 
             top: 90px;
-            left: 32px;
+            left: 25px;
 
-            width: 216px;
+            width:
+                calc(var(--expanded-width) - 50px);
 
             opacity: 0;
+
             transform: translateX(-18px);
 
             pointer-events: none;
 
             transition:
                 opacity 0.35s ease 0.08s,
-                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+                transform 0.55s
+                cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .sidebar:hover .sidebar-content,
-        .sidebar.expanded .sidebar-content {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: auto;
+
+
+        /* Desktop */
+
+        @media (hover: hover) and (pointer: fine) {
+
+            .sidebar:hover .sidebar-content {
+
+                opacity: 1;
+
+                transform: translateX(0);
+
+                pointer-events: auto;
+            }
+
         }
+
+
+
+        /* Mobile */
+
+        @media (hover: none) {
+
+            .sidebar.expanded .sidebar-content {
+
+                opacity: 1;
+
+                transform: translateX(0);
+
+                pointer-events: auto;
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SIDEBAR TITLE
+           ===================================================== */
 
         .sidebar-content h2 {
+
             font-size: 13px;
+
             font-weight: 400;
 
             letter-spacing: 3px;
+
             text-transform: uppercase;
 
-            margin-bottom: 28px;
+            margin-bottom: 30px;
 
-            color: rgba(255, 255, 255, 0.65);
+            color:
+                rgba(255, 255, 255, 0.65);
         }
 
-        .sidebar-content a {
-            display: block;
+
+
+        /* =====================================================
+           SIDEBAR HOME BUTTON
+           ===================================================== */
+
+        .sidebar-item {
+
+            width: 100%;
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+
+            padding:
+                0 12px;
 
             color: #fff;
+
             text-decoration: none;
 
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            border-radius: 7px;
 
-            padding: 13px 0;
-
-            opacity: 0.7;
+            opacity: 0.72;
 
             transition:
+                background 0.2s ease,
                 opacity 0.2s ease,
                 padding-left 0.25s ease;
         }
 
-        .sidebar-content a:hover {
+
+        .sidebar-item:hover {
+
+            background:
+                rgba(255, 255, 255, 0.06);
+
             opacity: 1;
-            padding-left: 8px;
+
+            padding-left: 17px;
         }
 
 
-        /* =========================
+
+        /* Home icon */
+
+        .sidebar-icon {
+
+            width: 21px;
+            height: 21px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+        }
+
+
+
+        /* Home text */
+
+        .sidebar-item span {
+
+            font-size: 13px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+
+
+        /* =====================================================
            MAIN CONTENT
-           ========================= */
+           ===================================================== */
 
         .main-content {
+
             width: 100%;
+
             min-height: 100vh;
         }
 
 
-        /* =========================
-           HERO
-           ========================= */
+
+        /* =====================================================
+           HERO / HOME SCREEN
+           ===================================================== */
 
         .hero-section {
+
+            width: 100%;
+
             height: 100vh;
 
-            background-image:
-                linear-gradient(
-                    to bottom,
-                    rgba(0, 0, 0, 0.2) 0%,
-                    rgba(0, 0, 0, 1) 100%
-                ),
-                url('night_cityscape.jpg');
+            min-height: 600px;
 
-            background-size: cover;
-            background-position: center;
+            position: relative;
 
             display: flex;
-            flex-direction: column;
 
             justify-content: center;
             align-items: center;
 
-            position: relative;
+            background-image:
+
+                linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.18) 0%,
+                    rgba(0, 0, 0, 0.35) 45%,
+                    rgba(0, 0, 0, 1) 100%
+                ),
+
+                url('night_cityscape.jpg');
+
+            background-size: cover;
+
+            background-position: center;
         }
 
 
-        /* =========================
-           TITLE
-           ========================= */
 
-        .central-title {
-            color: #fff;
+        /* =====================================================
+           HERO CONTENT
+           ===================================================== */
 
-            font-family: "CursiveFont", cursive;
+        .hero-content {
 
-            font-size: 8rem;
-            font-weight: 300;
+            width: 90%;
 
-            text-shadow:
-                0 0 10px rgba(255, 255, 255, 0.3);
+            max-width: 1000px;
 
-            margin-bottom: 20px;
+            display: flex;
 
-            position: relative;
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
 
             text-align: center;
+
+            transform:
+                translateY(-20px);
         }
 
-        .title-swash {
-            width: 80%;
-            height: 2px;
+
+
+        /* =====================================================
+           TITLE
+           ===================================================== */
+
+        .central-title {
+
+            color: #fff;
+
+            font-family:
+                "CursiveFont",
+                cursive;
+
+            font-size:
+                clamp(4rem, 8vw, 8rem);
+
+            font-weight: 300;
+
+            line-height: 1;
+
+            text-align: center;
+
+            white-space: nowrap;
+
+            text-shadow:
+                0 0 10px
+                rgba(255, 255, 255, 0.3);
+
+            margin: 0;
+        }
+
+
+
+        /* =====================================================
+           FAINT LINE UNDER TITLE
+           ===================================================== */
+
+        .title-divider {
+
+            width:
+                min(620px, 72vw);
+
+            height: 1px;
+
+            margin-top: 34px;
 
             background:
-                linear-gradient(
-                    to right,
-                    transparent,
-                    #fff 10%,
-                    #fff 90%,
-                    transparent
-                );
-
-            position: absolute;
-
-            bottom: -30px;
-            left: 10%;
-
-            border-radius: 5px;
+                rgba(255, 255, 255, 0.32);
 
             box-shadow:
-                0 0 10px rgba(255, 255, 255, 0.3);
+                0 0 8px
+                rgba(255, 255, 255, 0.07);
         }
 
 
-        /* =========================
+
+        /* =====================================================
+           SEARCH BAR
+           ===================================================== */
+
+        .hero-search {
+
+            width:
+                min(520px, 70vw);
+
+            height: 48px;
+
+            margin-top: 23px;
+
+            display: flex;
+
+            align-items: center;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.25);
+
+            background:
+                rgba(0, 0, 0, 0.20);
+
+            backdrop-filter:
+                blur(5px);
+
+            -webkit-backdrop-filter:
+                blur(5px);
+
+            transition:
+                border-color 0.25s ease,
+                background 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+
+        /* Search focus */
+
+        .hero-search:focus-within {
+
+            border-color:
+                rgba(255, 255, 255, 0.48);
+
+            background:
+                rgba(0, 0, 0, 0.35);
+
+            box-shadow:
+                0 0 18px
+                rgba(255, 255, 255, 0.05);
+        }
+
+
+
+        /* =====================================================
+           SEARCH ICON
+           ===================================================== */
+
+        .hero-search-icon {
+
+            width: 19px;
+            height: 19px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+
+            margin-left: 14px;
+
+            opacity: 0.48;
+        }
+
+
+
+        /* =====================================================
+           SEARCH INPUT
+           ===================================================== */
+
+        .hero-search-input {
+
+            width: 100%;
+
+            height: 100%;
+
+            padding:
+                0 15px;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            color: #fff;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            letter-spacing: 1px;
+        }
+
+
+
+        /* Placeholder */
+
+        .hero-search-input::placeholder {
+
+            color:
+                rgba(255, 255, 255, 0.36);
+
+            opacity: 1;
+        }
+
+
+
+        /* =====================================================
            LOWER SECTIONS
-           ========================= */
+           ===================================================== */
 
         .lower-section {
-            background: #000;
+
+            width: 100%;
 
             min-height: 100vh;
+
+            background: #000;
 
             padding: 80px;
         }
 
 
-        /* =========================
-           MOBILE
-           ========================= */
 
-        @media (max-width: 700px) {
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 768px) {
 
             .sidebar {
+
+                --sidebar-width: 60px;
                 --expanded-width: 245px;
             }
 
-            .central-title {
-                font-size: 4rem;
+
+            .hero-section {
+
+                min-height: 100svh;
+
+                height: 100svh;
+
+                background-position:
+                    center center;
             }
 
-            .lower-section {
-                padding: 40px 25px;
+
+            .hero-content {
+
+                width: 94%;
+
+                transform:
+                    translateY(-10px);
             }
+
+
+            .central-title {
+
+                /*
+                    Prevents the title from
+                    being cut off on phones.
+                */
+
+                font-size:
+                    clamp(2.8rem, 11vw, 5rem);
+
+                white-space: nowrap;
+            }
+
+
+            .title-divider {
+
+                width: 75vw;
+
+                margin-top: 25px;
+            }
+
+
+            .hero-search {
+
+                width: 78vw;
+
+                height: 46px;
+
+                margin-top: 20px;
+            }
+
+
+            .hero-search-icon {
+
+                width: 18px;
+                height: 18px;
+
+                margin-left: 13px;
+            }
+
+
+            .hero-search-input {
+
+                font-size: 13px;
+
+                padding:
+                    0 12px;
+            }
+
+
+            .lower-section {
+
+                padding:
+                    40px 25px;
+            }
+
         }
+
+
+
+        /* =====================================================
+           VERY SMALL PHONES
+           ===================================================== */
+
+        @media (max-width: 400px) {
+
+            .central-title {
+
+                font-size:
+                    clamp(2.4rem, 10.5vw, 3.5rem);
+            }
+
+
+            .hero-search {
+
+                width: 82vw;
+            }
+
+        }
+
     </style>
 </head>
 
 
+
 <body>
+
 
     <div class="page-container">
 
-        <!-- =========================
-             COLLAPSIBLE SIDEBAR
-             ========================= -->
 
-        <aside class="sidebar" id="sidebar">
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+
+            <!-- Sidebar arrow / toggle -->
 
             <button
                 class="sidebar-toggle"
@@ -369,65 +851,140 @@
                 aria-expanded="false"
             >
 
-                <!-- YOUR LOGO PNG -->
-                <img
-                    class="sidebar-logo"
-                    src="your-logo.png"
-                    alt=""
-                >
+                <!--
+                    YOUR ARROW PNG
 
-                <!-- YOUR ARROW PNG -->
+                    Your image points LEFT by default.
+                    CSS rotates it RIGHT when closed.
+                -->
+
                 <img
                     class="sidebar-arrow"
-                    src="your-arrow.png"
+                    src="Arrow.png"
                     alt=""
                 >
 
             </button>
 
 
-            <!-- SIDEBAR CONTENT -->
+
+            <!-- =================================================
+                 SIDEBAR CONTENT
+                 ================================================= -->
 
             <nav class="sidebar-content">
 
-                <h2>LateNight Studio</h2>
 
-                <a href="#home">Home</a>
-                <a href="#prototypes">Prototypes</a>
-                <a href="#projects">Projects</a>
-                <a href="#about">About</a>
+                <h2>
+                    LateNight Studio
+                </h2>
+
+
+
+                <!-- HOME -->
+
+                <a
+                    href="#home"
+                    class="sidebar-item"
+                >
+
+                    <img
+                        src="HomeIcon.png"
+                        alt=""
+                        class="sidebar-icon"
+                    >
+
+                    <span>
+                        Home
+                    </span>
+
+                </a>
+
 
             </nav>
 
         </aside>
 
 
-        <!-- =========================
+
+        <!-- =================================================
              MAIN CONTENT
-             ========================= -->
+             ================================================= -->
 
         <main class="main-content">
 
 
-            <!-- HERO -->
+
+            <!-- =================================================
+                 HOME / HERO
+                 ================================================= -->
 
             <section
                 class="hero-section"
                 id="home"
             >
 
-                <h1 class="central-title">
 
-                    LateNight Studio
+                <div class="hero-content">
 
-                    <div class="title-swash"></div>
 
-                </h1>
+                    <!-- TITLE -->
+
+                    <h1 class="central-title">
+                        LateNight Studio
+                    </h1>
+
+
+
+                    <!-- FAINT LINE -->
+
+                    <div
+                        class="title-divider"
+                    ></div>
+
+
+
+                    <!-- SEARCH -->
+
+                    <div
+                        class="hero-search"
+                    >
+
+
+                        <!-- Search icon -->
+
+                        <img
+                            src="Search.png"
+                            alt=""
+                            class="hero-search-icon"
+                        >
+
+
+
+                        <!-- Search input -->
+
+                        <input
+                            type="text"
+                            id="heroSearch"
+                            class="hero-search-input"
+                            placeholder="Search..."
+                            maxlength="50"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                </div>
+
 
             </section>
 
 
-            <!-- SECTION 2 -->
+
+            <!-- =================================================
+                 LOWER SECTIONS
+                 ================================================= -->
 
             <section
                 class="lower-section"
@@ -435,15 +992,11 @@
             ></section>
 
 
-            <!-- PROJECTS -->
-
             <section
                 class="lower-section"
                 id="projects"
             ></section>
 
-
-            <!-- ABOUT -->
 
             <section
                 class="lower-section"
@@ -453,49 +1006,175 @@
 
         </main>
 
+
     </div>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          JAVASCRIPT
-         ========================= -->
+         ===================================================== -->
 
     <script>
 
+
         const sidebar =
             document.getElementById("sidebar");
+
 
         const toggle =
             document.getElementById("sidebarToggle");
 
 
-        toggle.addEventListener("click", (event) => {
 
-            event.stopPropagation();
+        /*
+            Detect whether this device
+            actually supports hover.
 
-            sidebar.classList.toggle("expanded");
+            PC:
+                hover: hover
+                pointer: fine
+
+            Mobile:
+                hover: none
+                pointer: coarse
+        */
+
+        const hoverDevice =
+            window.matchMedia(
+                "(hover: hover) and (pointer: fine)"
+            );
 
 
-            const isExpanded =
-                sidebar.classList.contains("expanded");
+
+        /*
+            Update accessibility information.
+        */
+
+        function updateSidebarState(isOpen) {
+
+            sidebar.classList.toggle(
+                "expanded",
+                isOpen
+            );
 
 
             toggle.setAttribute(
                 "aria-expanded",
-                isExpanded
+                isOpen
             );
 
 
             toggle.setAttribute(
                 "aria-label",
-                isExpanded
+                isOpen
                     ? "Close sidebar"
                     : "Open sidebar"
             );
 
-        });
+        }
+
+
+
+        /*
+            MOBILE / TOUCH
+
+            On phones and tablets,
+            tapping the arrow opens/closes
+            the sidebar.
+
+            On desktop this does nothing,
+            because desktop uses hover.
+        */
+
+        toggle.addEventListener(
+            "click",
+            function(event) {
+
+                event.stopPropagation();
+
+
+                if (!hoverDevice.matches) {
+
+                    const isOpen =
+                        sidebar.classList.contains(
+                            "expanded"
+                        );
+
+
+                    updateSidebarState(
+                        !isOpen
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /*
+            If the device changes between
+            touch and mouse behavior,
+            reset the manual state.
+        */
+
+        hoverDevice.addEventListener(
+            "change",
+            function() {
+
+                updateSidebarState(false);
+
+            }
+        );
+
+
+
+        /*
+            SEARCH
+
+            maxlength="50" already prevents
+            the user from typing more than
+            50 characters.
+
+            This listener is just here in case
+            you later want search functionality.
+        */
+
+        const searchInput =
+            document.getElementById(
+                "heroSearch"
+            );
+
+
+        searchInput.addEventListener(
+            "input",
+            function() {
+
+                /*
+                    Whatever the user types
+                    is automatically displayed
+                    in the input.
+
+                    The "Search..." placeholder
+                    disappears automatically.
+                */
+
+                if (this.value.length > 50) {
+
+                    this.value =
+                        this.value.substring(
+                            0,
+                            50
+                        );
+
+                }
+
+            }
+        );
 
     </script>
+
 
 </body>
 </html>
