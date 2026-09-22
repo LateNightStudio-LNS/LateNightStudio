@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -9,12 +10,7 @@
 
     <title>LateNight Studio | Home</title>
 
-
     <style>
-
-        /* =====================================================
-           RESET
-           ===================================================== */
 
         * {
             box-sizing: border-box;
@@ -22,40 +18,74 @@
             padding: 0;
         }
 
-
         html {
             scroll-behavior: smooth;
         }
 
-
         body {
             background: #000;
             color: #fff;
-
             font-family: sans-serif;
-
             overflow-x: hidden;
         }
 
+        /* =========================================
+           LOADING SCREEN
+        ========================================= */
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999;
+
+            background: #000;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            opacity: 1;
+            visibility: visible;
+
+            transition:
+                opacity 0.6s ease,
+                visibility 0.6s ease;
+        }
+
+        .loading-icon {
+            width: 70px;
+            height: 70px;
+
+            object-fit: contain;
+            display: block;
+        }
+
+        .loading-screen.finished {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* =========================================
+           PAGE
+        ========================================= */
 
         .page-container {
             width: 100%;
             min-height: 100vh;
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            SIDEBAR
-           ===================================================== */
+        ========================================= */
 
         .sidebar {
-
             --sidebar-width: 72px;
             --expanded-width: 280px;
 
             position: fixed;
-
             top: 0;
             left: 0;
 
@@ -67,61 +97,54 @@
             background: #000;
 
             border-right:
-                1px solid rgba(255, 255, 255, 0.18);
+                1px solid
+                rgba(255, 255, 255, 0.18);
 
             overflow: hidden;
 
             transition:
-                width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                width 0.55s cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                ),
                 box-shadow 0.55s ease;
         }
 
-
-
-        /* =====================================================
-           DESKTOP HOVER
-
-           Only devices with an actual mouse get hover behavior.
-           ===================================================== */
+        /* Desktop hover */
 
         @media (hover: hover) and (pointer: fine) {
 
             .sidebar:hover {
-
                 width: var(--expanded-width);
 
                 box-shadow:
-                    12px 0 35px rgba(0, 0, 0, 0.45);
+                    12px 0 35px
+                    rgba(0, 0, 0, 0.45);
             }
 
         }
 
-
-
-        /* =====================================================
-           MOBILE / TOUCH OPEN STATE
-           ===================================================== */
+        /* Mobile / tablet click */
 
         @media (hover: none) {
 
             .sidebar.expanded {
-
                 width: var(--expanded-width);
 
                 box-shadow:
-                    12px 0 35px rgba(0, 0, 0, 0.55);
+                    12px 0 35px
+                    rgba(0, 0, 0, 0.55);
             }
 
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            SIDEBAR TOGGLE
-           ===================================================== */
+        ========================================= */
 
         .sidebar-toggle {
-
             position: absolute;
 
             top: 16px;
@@ -140,112 +163,62 @@
             cursor: pointer;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
             z-index: 20;
 
             transition:
-                left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+                left 0.55s cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                );
         }
 
-
-
-        /* Desktop: move arrow to top-right when hovered */
+        /* Move arrow to top-right when expanded */
 
         @media (hover: hover) and (pointer: fine) {
 
             .sidebar:hover .sidebar-toggle {
-
                 left:
-                    calc(var(--expanded-width) - 58px);
+                    calc(
+                        var(--expanded-width) - 58px
+                    );
             }
 
         }
-
-
-
-        /* Mobile: move arrow when clicked open */
 
         @media (hover: none) {
 
             .sidebar.expanded .sidebar-toggle {
-
                 left:
-                    calc(var(--expanded-width) - 58px);
+                    calc(
+                        var(--expanded-width) - 58px
+                    );
             }
 
         }
 
-
-
-        /* =====================================================
-           SIDEBAR LOGO
-           ===================================================== */
-
-        .sidebar-logo {
-
-            width: 27px;
-            height: 27px;
-
-            object-fit: contain;
-
-            display: block;
-
-            transition:
-                opacity 0.3s ease,
-                transform 0.55s
-                cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-
-
-        /* Hide logo when sidebar opens */
-
-        @media (hover: hover) and (pointer: fine) {
-
-            .sidebar:hover .sidebar-logo {
-
-                opacity: 0;
-
-                transform: scale(0.7);
-            }
-
-        }
-
-
-        @media (hover: none) {
-
-            .sidebar.expanded .sidebar-logo {
-
-                opacity: 0;
-
-                transform: scale(0.7);
-            }
-
-        }
-
-
-
-        /* =====================================================
+        /* =========================================
            SIDEBAR ARROW
-           ===================================================== */
+        ========================================= */
 
         .sidebar-arrow {
-
-            position: absolute;
-
             width: 19px;
             height: 19px;
 
             object-fit: contain;
 
             /*
-                Your arrow PNG points LEFT by default.
+                Arrow.png naturally points LEFT.
 
-                180deg rotation = RIGHT
-                0deg rotation   = LEFT
+                Collapsed:
+                rotate 180deg = RIGHT
+
+                Expanded:
+                rotate 0deg = LEFT
             */
 
             transform: rotate(180deg);
@@ -253,51 +226,44 @@
             opacity: 1;
 
             transition:
-                transform 0.55s
-                cubic-bezier(0.22, 1, 0.36, 1);
+                transform 0.55s cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                );
         }
-
-
-
-        /* Desktop open */
 
         @media (hover: hover) and (pointer: fine) {
 
             .sidebar:hover .sidebar-arrow {
-
                 transform: rotate(0deg);
             }
 
         }
-
-
-
-        /* Mobile open */
 
         @media (hover: none) {
 
             .sidebar.expanded .sidebar-arrow {
-
                 transform: rotate(0deg);
             }
 
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            SIDEBAR CONTENT
-           ===================================================== */
+        ========================================= */
 
         .sidebar-content {
-
             position: absolute;
 
             top: 90px;
             left: 25px;
 
             width:
-                calc(var(--expanded-width) - 50px);
+                calc(
+                    var(--expanded-width) - 50px
+                );
 
             opacity: 0;
 
@@ -307,18 +273,17 @@
 
             transition:
                 opacity 0.35s ease 0.08s,
-                transform 0.55s
-                cubic-bezier(0.22, 1, 0.36, 1);
+                transform 0.55s cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                );
         }
-
-
-
-        /* Desktop */
 
         @media (hover: hover) and (pointer: fine) {
 
             .sidebar:hover .sidebar-content {
-
                 opacity: 1;
 
                 transform: translateX(0);
@@ -327,15 +292,10 @@
             }
 
         }
-
-
-
-        /* Mobile */
 
         @media (hover: none) {
 
             .sidebar.expanded .sidebar-content {
-
                 opacity: 1;
 
                 transform: translateX(0);
@@ -345,14 +305,7 @@
 
         }
 
-
-
-        /* =====================================================
-           SIDEBAR TITLE
-           ===================================================== */
-
         .sidebar-content h2 {
-
             font-size: 13px;
 
             font-weight: 400;
@@ -367,25 +320,20 @@
                 rgba(255, 255, 255, 0.65);
         }
 
-
-
-        /* =====================================================
-           SIDEBAR HOME BUTTON
-           ===================================================== */
+        /* =========================================
+           SIDEBAR HOME ITEM
+        ========================================= */
 
         .sidebar-item {
-
             width: 100%;
             height: 48px;
 
             display: flex;
-
             align-items: center;
 
             gap: 16px;
 
-            padding:
-                0 12px;
+            padding: 0 12px;
 
             color: #fff;
 
@@ -401,9 +349,7 @@
                 padding-left 0.25s ease;
         }
 
-
         .sidebar-item:hover {
-
             background:
                 rgba(255, 255, 255, 0.06);
 
@@ -412,12 +358,7 @@
             padding-left: 17px;
         }
 
-
-
-        /* Home icon */
-
         .sidebar-icon {
-
             width: 21px;
             height: 21px;
 
@@ -426,12 +367,7 @@
             flex-shrink: 0;
         }
 
-
-
-        /* Home text */
-
         .sidebar-item span {
-
             font-size: 13px;
 
             letter-spacing: 2px;
@@ -441,29 +377,21 @@
             white-space: nowrap;
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            MAIN CONTENT
-           ===================================================== */
+        ========================================= */
 
         .main-content {
-
             width: 100%;
-
             min-height: 100vh;
         }
 
-
-
-        /* =====================================================
-           HERO / HOME SCREEN
-           ===================================================== */
+        /* =========================================
+           HERO
+        ========================================= */
 
         .hero-section {
-
             width: 100%;
-
             height: 100vh;
 
             min-height: 600px;
@@ -479,8 +407,11 @@
 
                 linear-gradient(
                     to bottom,
+
                     rgba(0, 0, 0, 0.18) 0%,
+
                     rgba(0, 0, 0, 0.35) 45%,
+
                     rgba(0, 0, 0, 1) 100%
                 ),
 
@@ -491,14 +422,11 @@
             background-position: center;
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            HERO CONTENT
-           ===================================================== */
+        ========================================= */
 
         .hero-content {
-
             width: 90%;
 
             max-width: 1000px;
@@ -513,18 +441,14 @@
 
             text-align: center;
 
-            transform:
-                translateY(-20px);
+            transform: translateY(-20px);
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            TITLE
-           ===================================================== */
+        ========================================= */
 
         .central-title {
-
             color: #fff;
 
             font-family:
@@ -532,7 +456,11 @@
                 cursive;
 
             font-size:
-                clamp(4rem, 8vw, 8rem);
+                clamp(
+                    4rem,
+                    8vw,
+                    8rem
+                );
 
             font-weight: 300;
 
@@ -549,16 +477,16 @@
             margin: 0;
         }
 
-
-
-        /* =====================================================
-           FAINT LINE UNDER TITLE
-           ===================================================== */
+        /* =========================================
+           TITLE DIVIDER
+        ========================================= */
 
         .title-divider {
-
             width:
-                min(620px, 72vw);
+                min(
+                    620px,
+                    72vw
+                );
 
             height: 1px;
 
@@ -572,16 +500,16 @@
                 rgba(255, 255, 255, 0.07);
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            SEARCH BAR
-           ===================================================== */
+        ========================================= */
 
         .hero-search {
-
             width:
-                min(520px, 70vw);
+                min(
+                    520px,
+                    70vw
+                );
 
             height: 48px;
 
@@ -598,11 +526,9 @@
             background:
                 rgba(0, 0, 0, 0.20);
 
-            backdrop-filter:
-                blur(5px);
+            backdrop-filter: blur(5px);
 
-            -webkit-backdrop-filter:
-                blur(5px);
+            -webkit-backdrop-filter: blur(5px);
 
             transition:
                 border-color 0.25s ease,
@@ -610,12 +536,7 @@
                 box-shadow 0.25s ease;
         }
 
-
-
-        /* Search focus */
-
         .hero-search:focus-within {
-
             border-color:
                 rgba(255, 255, 255, 0.48);
 
@@ -627,14 +548,7 @@
                 rgba(255, 255, 255, 0.05);
         }
 
-
-
-        /* =====================================================
-           SEARCH ICON
-           ===================================================== */
-
         .hero-search-icon {
-
             width: 19px;
             height: 19px;
 
@@ -647,23 +561,13 @@
             opacity: 0.48;
         }
 
-
-
-        /* =====================================================
-           SEARCH INPUT
-           ===================================================== */
-
         .hero-search-input {
-
             width: 100%;
-
             height: 100%;
 
-            padding:
-                0 15px;
+            padding: 0 15px;
 
             border: none;
-
             outline: none;
 
             background: transparent;
@@ -677,26 +581,18 @@
             letter-spacing: 1px;
         }
 
-
-
-        /* Placeholder */
-
         .hero-search-input::placeholder {
-
             color:
                 rgba(255, 255, 255, 0.36);
 
             opacity: 1;
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            LOWER SECTIONS
-           ===================================================== */
+        ========================================= */
 
         .lower-section {
-
             width: 100%;
 
             min-height: 100vh;
@@ -706,23 +602,18 @@
             padding: 80px;
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            MOBILE
-           ===================================================== */
+        ========================================= */
 
         @media (max-width: 768px) {
 
             .sidebar {
-
                 --sidebar-width: 60px;
                 --expanded-width: 245px;
             }
 
-
             .hero-section {
-
                 min-height: 100svh;
 
                 height: 100svh;
@@ -731,40 +622,31 @@
                     center center;
             }
 
-
             .hero-content {
-
                 width: 94%;
 
                 transform:
                     translateY(-10px);
             }
 
-
             .central-title {
-
-                /*
-                    Prevents the title from
-                    being cut off on phones.
-                */
-
                 font-size:
-                    clamp(2.8rem, 11vw, 5rem);
+                    clamp(
+                        2.8rem,
+                        11vw,
+                        5rem
+                    );
 
                 white-space: nowrap;
             }
 
-
             .title-divider {
-
                 width: 75vw;
 
                 margin-top: 25px;
             }
 
-
             .hero-search {
-
                 width: 78vw;
 
                 height: 46px;
@@ -772,50 +654,46 @@
                 margin-top: 20px;
             }
 
-
             .hero-search-icon {
-
                 width: 18px;
                 height: 18px;
 
                 margin-left: 13px;
             }
 
-
             .hero-search-input {
-
                 font-size: 13px;
 
-                padding:
-                    0 12px;
+                padding: 0 12px;
             }
 
-
             .lower-section {
-
                 padding:
                     40px 25px;
             }
 
+            .loading-icon {
+                width: 60px;
+                height: 60px;
+            }
         }
 
-
-
-        /* =====================================================
+        /* =========================================
            VERY SMALL PHONES
-           ===================================================== */
+        ========================================= */
 
         @media (max-width: 400px) {
 
             .central-title {
-
                 font-size:
-                    clamp(2.4rem, 10.5vw, 3.5rem);
+                    clamp(
+                        2.4rem,
+                        10.5vw,
+                        3.5rem
+                    );
             }
 
-
             .hero-search {
-
                 width: 82vw;
             }
 
@@ -824,25 +702,41 @@
     </style>
 </head>
 
-
-
 <body>
 
+    <!-- =========================================
+         LOADING SCREEN
+    ========================================= -->
+
+    <div
+        id="loadingScreen"
+        class="loading-screen"
+    >
+
+        <img
+            src="LoadingIcon.gif"
+            alt="Loading"
+            class="loading-icon"
+        >
+
+    </div>
+
+
+    <!-- =========================================
+         PAGE
+    ========================================= -->
 
     <div class="page-container">
 
 
-        <!-- =================================================
+        <!-- =====================================
              SIDEBAR
-             ================================================= -->
+        ====================================== -->
 
         <aside
             class="sidebar"
             id="sidebar"
         >
-
-
-            <!-- Sidebar arrow / toggle -->
 
             <button
                 class="sidebar-toggle"
@@ -850,13 +744,6 @@
                 aria-label="Open sidebar"
                 aria-expanded="false"
             >
-
-                <!--
-                    YOUR ARROW PNG
-
-                    Your image points LEFT by default.
-                    CSS rotates it RIGHT when closed.
-                -->
 
                 <img
                     class="sidebar-arrow"
@@ -867,21 +754,12 @@
             </button>
 
 
-
-            <!-- =================================================
-                 SIDEBAR CONTENT
-                 ================================================= -->
-
             <nav class="sidebar-content">
-
 
                 <h2>
                     LateNight Studio
                 </h2>
 
-
-
-                <!-- HOME -->
 
                 <a
                     href="#home"
@@ -900,58 +778,43 @@
 
                 </a>
 
-
             </nav>
 
         </aside>
 
 
-
-        <!-- =================================================
+        <!-- =====================================
              MAIN CONTENT
-             ================================================= -->
+        ====================================== -->
 
         <main class="main-content">
 
 
-
-            <!-- =================================================
-                 HOME / HERO
-                 ================================================= -->
+            <!-- =================================
+                 HERO / HOME
+            ================================== -->
 
             <section
                 class="hero-section"
                 id="home"
             >
 
-
                 <div class="hero-content">
 
-
-                    <!-- TITLE -->
 
                     <h1 class="central-title">
                         LateNight Studio
                     </h1>
 
 
-
-                    <!-- FAINT LINE -->
-
                     <div
                         class="title-divider"
                     ></div>
 
 
-
-                    <!-- SEARCH -->
-
                     <div
                         class="hero-search"
                     >
-
-
-                        <!-- Search icon -->
 
                         <img
                             src="Search.png"
@@ -959,9 +822,6 @@
                             class="hero-search-icon"
                         >
 
-
-
-                        <!-- Search input -->
 
                         <input
                             type="text"
@@ -974,17 +834,14 @@
 
                     </div>
 
-
                 </div>
-
 
             </section>
 
 
-
-            <!-- =================================================
-                 LOWER SECTIONS
-                 ================================================= -->
+            <!-- =================================
+                 FUTURE SECTIONS
+            ================================== -->
 
             <section
                 class="lower-section"
@@ -1006,39 +863,78 @@
 
         </main>
 
-
     </div>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================
          JAVASCRIPT
-         ===================================================== -->
+    ========================================= -->
 
     <script>
 
+        /* =========================================
+           LOADING SCREEN
+        ========================================= */
 
-        const sidebar =
-            document.getElementById("sidebar");
+        const loadingScreen =
+            document.getElementById(
+                "loadingScreen"
+            );
 
 
-        const toggle =
-            document.getElementById("sidebarToggle");
+        function hideLoadingScreen() {
 
+            requestAnimationFrame(() => {
+
+                loadingScreen.classList.add(
+                    "finished"
+                );
+
+            });
+
+        }
+
+
+        function showLoadingScreen() {
+
+            loadingScreen.classList.remove(
+                "finished"
+            );
+
+        }
 
 
         /*
-            Detect whether this device
-            actually supports hover.
+         * The initial loading screen stays visible
+         * until the entire page and its resources
+         * have finished loading.
+         */
 
-            PC:
-                hover: hover
-                pointer: fine
+        window.addEventListener(
+            "load",
+            function() {
 
-            Mobile:
-                hover: none
-                pointer: coarse
-        */
+                hideLoadingScreen();
+
+            }
+        );
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+        const toggle =
+            document.getElementById(
+                "sidebarToggle"
+            );
+
 
         const hoverDevice =
             window.matchMedia(
@@ -1046,12 +942,9 @@
             );
 
 
-
-        /*
-            Update accessibility information.
-        */
-
-        function updateSidebarState(isOpen) {
+        function updateSidebarState(
+            isOpen
+        ) {
 
             sidebar.classList.toggle(
                 "expanded",
@@ -1075,17 +968,12 @@
         }
 
 
-
         /*
-            MOBILE / TOUCH
-
-            On phones and tablets,
-            tapping the arrow opens/closes
-            the sidebar.
-
-            On desktop this does nothing,
-            because desktop uses hover.
-        */
+         * On phones/tablets, tapping the
+         * arrow opens and closes the sidebar.
+         *
+         * On desktop, hover handles it.
+         */
 
         toggle.addEventListener(
             "click",
@@ -1112,12 +1000,10 @@
         );
 
 
-
         /*
-            If the device changes between
-            touch and mouse behavior,
-            reset the manual state.
-        */
+         * Reset the mobile state if the device
+         * changes between touch and mouse input.
+         */
 
         hoverDevice.addEventListener(
             "change",
@@ -1129,17 +1015,9 @@
         );
 
 
-
-        /*
-            SEARCH
-
-            maxlength="50" already prevents
-            the user from typing more than
-            50 characters.
-
-            This listener is just here in case
-            you later want search functionality.
-        */
+        /* =========================================
+           SEARCH
+        ========================================= */
 
         const searchInput =
             document.getElementById(
@@ -1151,16 +1029,9 @@
             "input",
             function() {
 
-                /*
-                    Whatever the user types
-                    is automatically displayed
-                    in the input.
-
-                    The "Search..." placeholder
-                    disappears automatically.
-                */
-
-                if (this.value.length > 50) {
+                if (
+                    this.value.length > 50
+                ) {
 
                     this.value =
                         this.value.substring(
@@ -1173,8 +1044,35 @@
             }
         );
 
-    </script>
 
+        /* =========================================
+           FUTURE LOADING SUPPORT
+        ========================================= */
+
+        /*
+         * When you later add something like:
+
+             fetch("something.json")
+
+         * you can make the loading screen appear
+         * while it loads by doing:
+
+             showLoadingScreen();
+
+             fetch("something.json")
+                 .then(...)
+                 .finally(() => {
+                     hideLoadingScreen();
+                 });
+
+         *
+         * This means future pages/features can use
+         * the same loading screen instead of creating
+         * another one.
+         */
+
+
+    </script>
 
 </body>
 </html>
