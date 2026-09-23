@@ -25,11 +25,9 @@
             padding: 0;
         }
 
-
         html {
             scroll-behavior: smooth;
         }
-
 
         body {
             background: #000;
@@ -66,16 +64,13 @@
                 visibility 0.7s ease;
         }
 
-
         .loading-icon {
             width: 95px;
             height: 95px;
 
             object-fit: contain;
-
             display: block;
         }
-
 
         .loading-screen.finished {
             opacity: 0;
@@ -132,7 +127,7 @@
         }
 
 
-        /* Desktop */
+        /* Desktop hover */
 
         @media (hover: hover) and (pointer: fine) {
 
@@ -147,7 +142,7 @@
         }
 
 
-        /* Mobile */
+        /* Mobile / tablet */
 
         @media (hover: none) {
 
@@ -235,6 +230,13 @@
             height: 27px;
 
             object-fit: contain;
+
+            /*
+             * Arrow.png naturally points LEFT.
+             *
+             * Collapsed = RIGHT
+             * Expanded = LEFT
+             */
 
             transform: rotate(180deg);
 
@@ -384,7 +386,7 @@
         }
 
 
-        /* BIGGER ICON */
+        /* Larger Home icon */
 
         .sidebar-icon {
 
@@ -450,8 +452,8 @@
 
 
         /*
-         * This black layer is what makes the city
-         * smoothly disappear after the intro.
+         * Black overlay used to fade the city
+         * completely away after the intro.
          */
 
         .hero-section::after {
@@ -478,6 +480,11 @@
                     0.36,
                     1
                 );
+        }
+
+
+        .hero-section.fade-background::after {
+            opacity: 1;
         }
 
 
@@ -535,7 +542,10 @@
                 0 0 10px
                 rgba(255, 255, 255, 0.3);
 
+            z-index: 5;
+
             transition:
+
                 left 1.35s
                 cubic-bezier(
                     0.16,
@@ -569,15 +579,11 @@
                 ),
 
                 text-shadow 1s ease;
-
-            z-index: 5;
         }
 
 
         /*
-         * Desktop final title position.
-         *
-         * It stays clear of the sidebar.
+         * Desktop final position.
          */
 
         .intro-finished .central-title {
@@ -606,7 +612,7 @@
 
 
         /* =========================================
-           SEARCH
+           SEARCH BAR
         ========================================= */
 
         .hero-search {
@@ -662,7 +668,8 @@
 
 
         /*
-         * Search only appears after title animation.
+         * Search appears only after the
+         * title has finished moving.
          */
 
         .intro-finished .hero-search {
@@ -778,16 +785,12 @@
             }
 
 
-            /* Bigger mobile arrow */
-
             .sidebar-arrow {
 
                 width: 25px;
                 height: 25px;
             }
 
-
-            /* Bigger mobile sidebar icon */
 
             .sidebar-icon {
 
@@ -796,9 +799,7 @@
             }
 
 
-            /*
-             * Initial title
-             */
+            /* Initial large title */
 
             .central-title {
 
@@ -812,20 +813,27 @@
 
 
             /*
-             * Final mobile title becomes LNS.
+             * Hide "LateNight Studio"
+             * once intro finishes.
              */
 
             .intro-finished .desktop-title {
-
                 display: none;
             }
 
 
-            .intro-finished .mobile-title {
+            /*
+             * Show LNS after animation.
+             */
 
+            .intro-finished .mobile-title {
                 display: block;
             }
 
+
+            /*
+             * Final mobile title position.
+             */
 
             .intro-finished .central-title {
 
@@ -841,11 +849,7 @@
             }
 
 
-            /*
-             * Mobile search.
-             *
-             * It sits on the top-right beside LNS.
-             */
+            /* Mobile search */
 
             .hero-search {
 
@@ -1020,14 +1024,14 @@
 
 
         <!-- =====================================
-             MAIN
+             MAIN CONTENT
         ====================================== -->
 
         <main class="main-content">
 
 
             <!-- =================================
-                 HERO
+                 HOME / HERO
             ================================== -->
 
             <section
@@ -1117,7 +1121,7 @@
 
 
         /* =========================================
-           LOADING
+           LOADING SCREEN
         ========================================= */
 
         const loadingScreen =
@@ -1139,34 +1143,70 @@
 
 
         /*
-         * Minimum time the loading screen stays.
+         * The loading screen:
          *
-         * This makes the GIF actually visible
-         * instead of disappearing instantly.
+         * - stays for AT LEAST 1 second
+         * - waits for the page to finish loading
+         * - disappears as soon as loading finishes
+         * - NEVER stays longer than 10 seconds
          */
 
-        const minimumLoadingTime = 1200;
+        const MIN_LOADING_TIME = 1000;
+
+        const MAX_LOADING_TIME = 10000;
+
 
         const loadingStartedAt =
             performance.now();
 
 
-        function hideLoadingScreen() {
+        let pageFinishedLoading =
+            false;
+
+
+        /* =========================================
+           FINISH INITIAL LOADING
+        ========================================= */
+
+        function finishInitialLoading() {
+
+            /*
+             * Prevent the function from doing
+             * anything twice.
+             */
+
+            if (pageFinishedLoading) {
+                return;
+            }
+
+
+            pageFinishedLoading = true;
+
 
             const elapsed =
                 performance.now()
                 - loadingStartedAt;
 
 
+            /*
+             * If everything loaded too quickly,
+             * keep the loading screen visible
+             * until at least 1 second has passed.
+             */
+
             const remaining =
                 Math.max(
                     0,
-                    minimumLoadingTime - elapsed
+                    MIN_LOADING_TIME - elapsed
                 );
 
 
             setTimeout(
                 function() {
+
+                    /*
+                     * Fade loading screen out.
+                     */
 
                     loadingScreen.classList.add(
                         "finished"
@@ -1174,14 +1214,17 @@
 
 
                     /*
-                     * Give the loading screen a
-                     * moment to fade away before
-                     * starting the title animation.
+                     * Wait until that fade is done
+                     * before beginning the title animation.
                      */
 
                     setTimeout(
-                        startIntroAnimation,
-                        450
+                        function() {
+
+                            startIntroAnimation();
+
+                        },
+                        700
                     );
 
                 },
@@ -1190,16 +1233,41 @@
         }
 
 
-        /*
-         * Initial page loading.
-         *
-         * window.load waits for images,
-         * background resources, etc.
-         */
+        /* =========================================
+           PAGE LOADED
+        ========================================= */
 
         window.addEventListener(
             "load",
-            hideLoadingScreen
+            function() {
+
+                finishInitialLoading();
+
+            }
+        );
+
+
+        /* =========================================
+           10 SECOND MAXIMUM
+        ========================================= */
+
+        /*
+         * If something gets stuck loading,
+         * don't trap the user on the loading screen
+         * forever.
+         */
+
+        setTimeout(
+            function() {
+
+                if (!pageFinishedLoading) {
+
+                    finishInitialLoading();
+
+                }
+
+            },
+            MAX_LOADING_TIME
         );
 
 
@@ -1210,7 +1278,8 @@
         function startIntroAnimation() {
 
             /*
-             * First the title moves/shrinks.
+             * Move the title from the center
+             * to the top-left.
              */
 
             document.body.classList.add(
@@ -1219,11 +1288,8 @@
 
 
             /*
-             * Then the city fades to black.
-             *
-             * This starts at the same time as
-             * the title movement, but because of
-             * the longer fade it disappears softly.
+             * Fade the city background
+             * completely into black.
              */
 
             heroSection.classList.add(
@@ -1232,8 +1298,8 @@
 
 
             /*
-             * Focus search only after the animation
-             * has finished.
+             * Search becomes active after
+             * the title finishes moving.
              */
 
             setTimeout(
@@ -1247,35 +1313,29 @@
         }
 
 
-        /*
-         * Background fade class.
-         */
-
-        heroSection.classList.add =
-            heroSection.classList.add;
-
+        /* =========================================
+           FUTURE LOADING FUNCTIONS
+        ========================================= */
 
         /*
-         * The actual background fade is controlled
-         * by adding this class dynamically.
+         * These can be used later when you add
+         * pages, API requests, data, etc.
          */
 
-        const backgroundStyle =
-            document.createElement("style");
+        function showLoadingScreen() {
+
+            loadingScreen.classList.remove(
+                "finished"
+            );
+        }
 
 
-        backgroundStyle.textContent = `
+        function finishLoading() {
 
-            .hero-section.fade-background::after {
-                opacity: 1;
-            }
-
-        `;
-
-
-        document.head.appendChild(
-            backgroundStyle
-        );
+            loadingScreen.classList.add(
+                "finished"
+            );
+        }
 
 
         /* =========================================
@@ -1326,7 +1386,11 @@
 
 
         /*
-         * Mobile/tablet click behavior.
+         * On phones/tablets:
+         * click arrow to open/close.
+         *
+         * On desktop:
+         * hover controls the sidebar.
          */
 
         toggle.addEventListener(
@@ -1348,14 +1412,13 @@
                         !isOpen
                     );
                 }
-
             }
         );
 
 
         /*
-         * Reset state when switching between
-         * touch and mouse devices.
+         * Reset sidebar state when the device
+         * switches between touch/mouse behavior.
          */
 
         hoverDevice.addEventListener(
@@ -1369,7 +1432,7 @@
 
 
         /* =========================================
-           SEARCH LIMIT
+           SEARCH
         ========================================= */
 
         searchInput.addEventListener(
@@ -1386,46 +1449,8 @@
                             50
                         );
                 }
-
             }
         );
-
-
-        /* =========================================
-           FUTURE LOADING FUNCTIONS
-        ========================================= */
-
-        /*
-         * Use these later whenever you add
-         * something that needs to load.
-         *
-         * Example:
-         *
-         * showLoadingScreen();
-         *
-         * fetch("data.json")
-         *     .then(...)
-         *     .finally(() => {
-         *         hideLoadingScreen();
-         *     });
-         */
-
-
-        function showLoadingScreen() {
-
-            loadingScreen.classList.remove(
-                "finished"
-            );
-        }
-
-
-        function finishLoading() {
-
-            loadingScreen.classList.add(
-                "finished"
-            );
-        }
-
 
     </script>
 
