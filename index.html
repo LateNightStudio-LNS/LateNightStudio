@@ -64,6 +64,7 @@
                 visibility 0.7s ease;
         }
 
+
         .loading-icon {
             width: 95px;
             height: 95px;
@@ -71,6 +72,7 @@
             object-fit: contain;
             display: block;
         }
+
 
         .loading-screen.finished {
             opacity: 0;
@@ -231,13 +233,6 @@
 
             object-fit: contain;
 
-            /*
-             * Arrow.png naturally points LEFT.
-             *
-             * Collapsed = RIGHT
-             * Expanded = LEFT
-             */
-
             transform: rotate(180deg);
 
             transition:
@@ -386,8 +381,6 @@
         }
 
 
-        /* Larger Home icon */
-
         .sidebar-icon {
 
             width: 30px;
@@ -451,10 +444,7 @@
         }
 
 
-        /*
-         * Black overlay used to fade the city
-         * completely away after the intro.
-         */
+        /* Black fade layer */
 
         .hero-section::after {
 
@@ -538,6 +528,8 @@
 
             text-align: center;
 
+            opacity: 1;
+
             text-shadow:
                 0 0 10px
                 rgba(255, 255, 255, 0.3);
@@ -578,13 +570,15 @@
                     1
                 ),
 
+                opacity 0.8s ease 1.35s,
+
                 text-shadow 1s ease;
         }
 
 
-        /*
-         * Desktop final position.
-         */
+        /* =========================================
+           DESKTOP FINAL TITLE
+        ========================================= */
 
         .intro-finished .central-title {
 
@@ -596,9 +590,16 @@
 
             font-size: 2rem;
 
+            /*
+             * This fade starts AFTER the
+             * 1.35 second movement.
+             */
+
+            opacity: 0.58;
+
             text-shadow:
                 0 0 8px
-                rgba(255, 255, 255, 0.18);
+                rgba(255, 255, 255, 0.12);
         }
 
 
@@ -612,7 +613,7 @@
 
 
         /* =========================================
-           SEARCH BAR
+           SEARCH
         ========================================= */
 
         .hero-search {
@@ -667,10 +668,7 @@
         }
 
 
-        /*
-         * Search appears only after the
-         * title has finished moving.
-         */
+        /* Search appears after title */
 
         .intro-finished .hero-search {
 
@@ -799,8 +797,6 @@
             }
 
 
-            /* Initial large title */
-
             .central-title {
 
                 font-size:
@@ -812,28 +808,19 @@
             }
 
 
-            /*
-             * Hide "LateNight Studio"
-             * once intro finishes.
-             */
+            /* Change to LNS after animation */
 
             .intro-finished .desktop-title {
                 display: none;
             }
 
 
-            /*
-             * Show LNS after animation.
-             */
-
             .intro-finished .mobile-title {
                 display: block;
             }
 
 
-            /*
-             * Final mobile title position.
-             */
+            /* Final mobile title */
 
             .intro-finished .central-title {
 
@@ -846,6 +833,8 @@
                 font-size: 2rem;
 
                 letter-spacing: 1px;
+
+                opacity: 0.58;
             }
 
 
@@ -913,6 +902,8 @@
                 top: 28px;
 
                 font-size: 1.8rem;
+
+                opacity: 0.58;
             }
 
 
@@ -1024,15 +1015,11 @@
 
 
         <!-- =====================================
-             MAIN CONTENT
+             MAIN
         ====================================== -->
 
         <main class="main-content">
 
-
-            <!-- =================================
-                 HOME / HERO
-            ================================== -->
 
             <section
                 class="hero-section"
@@ -1086,9 +1073,7 @@
             </section>
 
 
-            <!-- =================================
-                 FUTURE SECTIONS
-            ================================== -->
+            <!-- FUTURE SECTIONS -->
 
             <section
                 class="lower-section"
@@ -1121,7 +1106,7 @@
 
 
         /* =========================================
-           LOADING SCREEN
+           LOADING
         ========================================= */
 
         const loadingScreen =
@@ -1143,12 +1128,11 @@
 
 
         /*
-         * The loading screen:
+         * Minimum:
+         * 1 second
          *
-         * - stays for AT LEAST 1 second
-         * - waits for the page to finish loading
-         * - disappears as soon as loading finishes
-         * - NEVER stays longer than 10 seconds
+         * Maximum:
+         * 10 seconds
          */
 
         const MIN_LOADING_TIME = 1000;
@@ -1164,16 +1148,7 @@
             false;
 
 
-        /* =========================================
-           FINISH INITIAL LOADING
-        ========================================= */
-
         function finishInitialLoading() {
-
-            /*
-             * Prevent the function from doing
-             * anything twice.
-             */
 
             if (pageFinishedLoading) {
                 return;
@@ -1188,12 +1163,6 @@
                 - loadingStartedAt;
 
 
-            /*
-             * If everything loaded too quickly,
-             * keep the loading screen visible
-             * until at least 1 second has passed.
-             */
-
             const remaining =
                 Math.max(
                     0,
@@ -1205,7 +1174,7 @@
                 function() {
 
                     /*
-                     * Fade loading screen out.
+                     * Fade away loading screen.
                      */
 
                     loadingScreen.classList.add(
@@ -1214,8 +1183,8 @@
 
 
                     /*
-                     * Wait until that fade is done
-                     * before beginning the title animation.
+                     * Wait for loading screen
+                     * fade before starting title.
                      */
 
                     setTimeout(
@@ -1234,7 +1203,7 @@
 
 
         /* =========================================
-           PAGE LOADED
+           WAIT FOR PAGE
         ========================================= */
 
         window.addEventListener(
@@ -1248,14 +1217,8 @@
 
 
         /* =========================================
-           10 SECOND MAXIMUM
+           10 SECOND SAFETY LIMIT
         ========================================= */
-
-        /*
-         * If something gets stuck loading,
-         * don't trap the user on the loading screen
-         * forever.
-         */
 
         setTimeout(
             function() {
@@ -1278,8 +1241,7 @@
         function startIntroAnimation() {
 
             /*
-             * Move the title from the center
-             * to the top-left.
+             * Title moves to top-left.
              */
 
             document.body.classList.add(
@@ -1288,8 +1250,7 @@
 
 
             /*
-             * Fade the city background
-             * completely into black.
+             * City background fades to black.
              */
 
             heroSection.classList.add(
@@ -1299,7 +1260,7 @@
 
             /*
              * Search becomes active after
-             * the title finishes moving.
+             * title movement.
              */
 
             setTimeout(
@@ -1316,11 +1277,6 @@
         /* =========================================
            FUTURE LOADING FUNCTIONS
         ========================================= */
-
-        /*
-         * These can be used later when you add
-         * pages, API requests, data, etc.
-         */
 
         function showLoadingScreen() {
 
@@ -1385,14 +1341,6 @@
         }
 
 
-        /*
-         * On phones/tablets:
-         * click arrow to open/close.
-         *
-         * On desktop:
-         * hover controls the sidebar.
-         */
-
         toggle.addEventListener(
             "click",
             function(event) {
@@ -1416,11 +1364,6 @@
         );
 
 
-        /*
-         * Reset sidebar state when the device
-         * switches between touch/mouse behavior.
-         */
-
         hoverDevice.addEventListener(
             "change",
             function() {
@@ -1432,7 +1375,7 @@
 
 
         /* =========================================
-           SEARCH
+           SEARCH LIMIT
         ========================================= */
 
         searchInput.addEventListener(
