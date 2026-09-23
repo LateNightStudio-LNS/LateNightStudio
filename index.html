@@ -25,9 +25,11 @@
             padding: 0;
         }
 
+
         html {
             scroll-behavior: smooth;
         }
+
 
         body {
             background: #000;
@@ -42,7 +44,9 @@
         ========================================= */
 
         .loading-screen {
+
             position: fixed;
+
             inset: 0;
 
             width: 100vw;
@@ -53,6 +57,7 @@
             background: #000;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -66,17 +71,22 @@
 
 
         .loading-icon {
+
             width: 95px;
             height: 95px;
 
             object-fit: contain;
+
             display: block;
         }
 
 
         .loading-screen.finished {
+
             opacity: 0;
+
             visibility: hidden;
+
             pointer-events: none;
         }
 
@@ -86,7 +96,9 @@
         ========================================= */
 
         .page-container {
+
             width: 100%;
+
             min-height: 100vh;
         }
 
@@ -116,7 +128,7 @@
                 1px solid
                 rgba(255, 255, 255, 0.18);
 
-            overflow: hidden;
+            overflow: visible;
 
             transition:
                 width 0.55s cubic-bezier(
@@ -129,33 +141,17 @@
         }
 
 
-        /* Desktop hover */
+        /* =========================================
+           EXPANDED SIDEBAR
+        ========================================= */
 
-        @media (hover: hover) and (pointer: fine) {
+        .sidebar.expanded {
 
-            .sidebar:hover {
+            width: var(--expanded-width);
 
-                width: var(--expanded-width);
-
-                box-shadow:
-                    12px 0 35px
-                    rgba(0, 0, 0, 0.45);
-            }
-        }
-
-
-        /* Mobile / tablet */
-
-        @media (hover: none) {
-
-            .sidebar.expanded {
-
-                width: var(--expanded-width);
-
-                box-shadow:
-                    12px 0 35px
-                    rgba(0, 0, 0, 0.55);
-            }
+            box-shadow:
+                12px 0 35px
+                rgba(0, 0, 0, 0.45);
         }
 
 
@@ -168,7 +164,7 @@
             position: absolute;
 
             top: 16px;
-            left: 12px;
+            left: 15px;
 
             width: 42px;
             height: 42px;
@@ -183,10 +179,11 @@
             cursor: pointer;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
-            z-index: 20;
+            z-index: 30;
 
             transition:
                 left 0.55s cubic-bezier(
@@ -198,45 +195,39 @@
         }
 
 
-        @media (hover: hover) and (pointer: fine) {
+        /*
+         * Move toggle to the right side
+         * when sidebar is expanded.
+         */
 
-            .sidebar:hover .sidebar-toggle {
+        .sidebar.expanded .sidebar-toggle {
 
-                left:
-                    calc(
-                        var(--expanded-width) - 58px
-                    );
-            }
-        }
-
-
-        @media (hover: none) {
-
-            .sidebar.expanded .sidebar-toggle {
-
-                left:
-                    calc(
-                        var(--expanded-width) - 58px
-                    );
-            }
+            left:
+                calc(
+                    var(--expanded-width) - 58px
+                );
         }
 
 
         /* =========================================
-           SIDEBAR ARROW
+           TOGGLE ICONS
         ========================================= */
 
-        .sidebar-arrow {
+        .toggle-icon {
+
+            position: absolute;
 
             width: 27px;
             height: 27px;
 
             object-fit: contain;
 
-            transform: rotate(180deg);
-
             transition:
-                transform 0.55s cubic-bezier(
+
+                opacity 0.3s ease,
+
+                transform 0.55s
+                cubic-bezier(
                     0.22,
                     1,
                     0.36,
@@ -245,21 +236,54 @@
         }
 
 
-        @media (hover: hover) and (pointer: fine) {
+        /* Main logo */
 
-            .sidebar:hover .sidebar-arrow {
+        .main-icon {
 
-                transform: rotate(0deg);
-            }
+            opacity: 1;
+
+            transform:
+                scale(1)
+                rotate(0deg);
         }
 
 
-        @media (hover: none) {
+        /* Arrow */
 
-            .sidebar.expanded .sidebar-arrow {
+        .arrow-icon {
 
-                transform: rotate(0deg);
-            }
+            opacity: 0;
+
+            transform:
+                scale(0.65)
+                rotate(-90deg);
+        }
+
+
+        /*
+         * Expanded:
+         *
+         * MainIcon fades away.
+         * Arrow smoothly appears.
+         */
+
+        .sidebar.expanded .main-icon {
+
+            opacity: 0;
+
+            transform:
+                scale(0.65)
+                rotate(90deg);
+        }
+
+
+        .sidebar.expanded .arrow-icon {
+
+            opacity: 1;
+
+            transform:
+                scale(1)
+                rotate(0deg);
         }
 
 
@@ -272,57 +296,28 @@
             position: absolute;
 
             top: 90px;
-            left: 25px;
+            left: 0;
 
-            width:
-                calc(
-                    var(--expanded-width) - 50px
-                );
+            width: 100%;
 
-            opacity: 0;
+            padding:
+                0 12px;
 
-            transform: translateX(-18px);
+            opacity: 1;
 
-            pointer-events: none;
-
-            transition:
-                opacity 0.35s ease 0.08s,
-                transform 0.55s cubic-bezier(
-                    0.22,
-                    1,
-                    0.36,
-                    1
-                );
+            pointer-events: auto;
         }
 
 
-        @media (hover: hover) and (pointer: fine) {
-
-            .sidebar:hover .sidebar-content {
-
-                opacity: 1;
-
-                transform: translateX(0);
-
-                pointer-events: auto;
-            }
-        }
-
-
-        @media (hover: none) {
-
-            .sidebar.expanded .sidebar-content {
-
-                opacity: 1;
-
-                transform: translateX(0);
-
-                pointer-events: auto;
-            }
-        }
-
+        /* =========================================
+           SIDEBAR TITLE
+        ========================================= */
 
         .sidebar-content h2 {
+
+            margin-left: 13px;
+
+            margin-bottom: 30px;
 
             font-size: 13px;
 
@@ -332,28 +327,59 @@
 
             text-transform: uppercase;
 
-            margin-bottom: 30px;
-
             color:
                 rgba(255, 255, 255, 0.65);
+
+            white-space: nowrap;
+
+            opacity: 0;
+
+            transform:
+                translateX(-15px);
+
+            transition:
+
+                opacity 0.35s ease 0.12s,
+
+                transform 0.55s
+                cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                );
+        }
+
+
+        .sidebar.expanded
+        .sidebar-content h2 {
+
+            opacity: 1;
+
+            transform:
+                translateX(0);
         }
 
 
         /* =========================================
-           SIDEBAR ITEM
+           SIDEBAR ITEMS
         ========================================= */
 
         .sidebar-item {
+
+            position: relative;
 
             width: 100%;
             height: 52px;
 
             display: flex;
+
             align-items: center;
 
             gap: 18px;
 
-            padding: 0 12px;
+            padding:
+                0 13px;
 
             color: #fff;
 
@@ -364,8 +390,11 @@
             opacity: 0.72;
 
             transition:
+
                 background 0.2s ease,
+
                 opacity 0.2s ease,
+
                 padding-left 0.25s ease;
         }
 
@@ -376,10 +405,12 @@
                 rgba(255, 255, 255, 0.06);
 
             opacity: 1;
-
-            padding-left: 17px;
         }
 
+
+        /* =========================================
+           SIDEBAR ICON
+        ========================================= */
 
         .sidebar-icon {
 
@@ -389,8 +420,14 @@
             object-fit: contain;
 
             flex-shrink: 0;
+
+            display: block;
         }
 
+
+        /* =========================================
+           SIDEBAR TEXT
+        ========================================= */
 
         .sidebar-item span {
 
@@ -401,6 +438,135 @@
             text-transform: uppercase;
 
             white-space: nowrap;
+
+            opacity: 0;
+
+            transform:
+                translateX(-10px);
+
+            pointer-events: none;
+
+            transition:
+
+                opacity 0.3s ease 0.08s,
+
+                transform 0.4s
+                cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                );
+        }
+
+
+        /*
+         * Show text only when expanded.
+         */
+
+        .sidebar.expanded
+        .sidebar-item span {
+
+            opacity: 1;
+
+            transform:
+                translateX(0);
+
+            pointer-events: auto;
+        }
+
+
+        /* =========================================
+           TOOLTIP
+        ========================================= */
+
+        .sidebar-item::after {
+
+            content:
+                attr(data-tooltip);
+
+            position: absolute;
+
+            left: calc(100% + 12px);
+
+            top: 50%;
+
+            transform:
+                translate(
+                    -8px,
+                    -50%
+                );
+
+            padding:
+                8px 12px;
+
+            border-radius: 6px;
+
+            background:
+                rgba(15, 15, 15, 0.96);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.14);
+
+            color: #fff;
+
+            font-size: 12px;
+
+            letter-spacing: 1px;
+
+            white-space: nowrap;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            pointer-events: none;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.45);
+
+            transition:
+
+                opacity 0.2s ease,
+
+                transform 0.25s ease,
+
+                visibility 0.2s ease;
+
+            z-index: 100;
+        }
+
+
+        /*
+         * Tooltip only appears while
+         * sidebar is collapsed.
+         */
+
+        .sidebar:not(.expanded)
+        .sidebar-item:hover::after {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                translate(
+                    0,
+                    -50%
+                );
+        }
+
+
+        /*
+         * Never show tooltip while expanded.
+         */
+
+        .sidebar.expanded
+        .sidebar-item::after {
+
+            display: none;
         }
 
 
@@ -411,6 +577,7 @@
         .main-content {
 
             width: 100%;
+
             min-height: 100vh;
         }
 
@@ -422,6 +589,7 @@
         .hero-section {
 
             width: 100%;
+
             height: 100vh;
 
             min-height: 600px;
@@ -431,6 +599,7 @@
             display: flex;
 
             justify-content: center;
+
             align-items: center;
 
             background-image:
@@ -444,7 +613,9 @@
         }
 
 
-        /* Black fade layer */
+        /* =========================================
+           HERO BLACK FADE
+        ========================================= */
 
         .hero-section::after {
 
@@ -474,6 +645,7 @@
 
 
         .hero-section.fade-background::after {
+
             opacity: 1;
         }
 
@@ -505,7 +677,10 @@
             top: 50%;
 
             transform:
-                translate(-50%, -50%);
+                translate(
+                    -50%,
+                    -50%
+                );
 
             color: #fff;
 
@@ -532,7 +707,12 @@
 
             text-shadow:
                 0 0 10px
-                rgba(255, 255, 255, 0.3);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.3
+                );
 
             z-index: 5;
 
@@ -577,29 +757,38 @@
 
 
         /* =========================================
-           DESKTOP FINAL TITLE
+           FINAL TITLE
         ========================================= */
 
         .intro-finished .central-title {
 
             left: 110px;
+
             top: 34px;
 
             transform:
-                translate(0, 0);
+                translate(
+                    0,
+                    0
+                );
 
             font-size: 2rem;
 
             /*
-             * This fade starts AFTER the
-             * 1.35 second movement.
+             * This begins fading only after
+             * the movement finishes.
              */
 
             opacity: 0.58;
 
             text-shadow:
                 0 0 8px
-                rgba(255, 255, 255, 0.12);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
         }
 
 
@@ -608,6 +797,7 @@
         ========================================= */
 
         .mobile-title {
+
             display: none;
         }
 
@@ -621,9 +811,11 @@
             position: absolute;
 
             top: 27px;
+
             right: 55px;
 
             width: 360px;
+
             height: 44px;
 
             display: flex;
@@ -632,14 +824,26 @@
 
             border:
                 1px solid
-                rgba(255, 255, 255, 0.25);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.25
+                );
 
             background:
-                rgba(0, 0, 0, 0.20);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.20
+                );
 
-            backdrop-filter: blur(5px);
+            backdrop-filter:
+                blur(5px);
 
-            -webkit-backdrop-filter: blur(5px);
+            -webkit-backdrop-filter:
+                blur(5px);
 
             opacity: 0;
 
@@ -668,8 +872,6 @@
         }
 
 
-        /* Search appears after title */
-
         .intro-finished .hero-search {
 
             opacity: 1;
@@ -686,14 +888,29 @@
         .hero-search:focus-within {
 
             border-color:
-                rgba(255, 255, 255, 0.48);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.48
+                );
 
             background:
-                rgba(0, 0, 0, 0.35);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.35
+                );
 
             box-shadow:
                 0 0 18px
-                rgba(255, 255, 255, 0.05);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.05
+                );
         }
 
 
@@ -715,11 +932,14 @@
         .hero-search-input {
 
             width: 100%;
+
             height: 100%;
 
-            padding: 0 15px;
+            padding:
+                0 15px;
 
             border: none;
+
             outline: none;
 
             background: transparent;
@@ -737,7 +957,12 @@
         .hero-search-input::placeholder {
 
             color:
-                rgba(255, 255, 255, 0.36);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.36
+                );
 
             opacity: 1;
         }
@@ -768,7 +993,71 @@
             .sidebar {
 
                 --sidebar-width: 60px;
+
                 --expanded-width: 245px;
+            }
+
+
+            .sidebar.expanded {
+
+                width:
+                    var(--expanded-width);
+            }
+
+
+            .sidebar-content {
+
+                padding:
+                    0 8px;
+            }
+
+
+            .sidebar-toggle {
+
+                top: 14px;
+
+                left: 9px;
+            }
+
+
+            .sidebar.expanded
+            .sidebar-toggle {
+
+                left:
+                    calc(
+                        var(--expanded-width) - 54px
+                    );
+            }
+
+
+            .toggle-icon {
+
+                width: 25px;
+                height: 25px;
+            }
+
+
+            .sidebar-content h2 {
+
+                margin-left: 13px;
+            }
+
+
+            .sidebar-item {
+
+                height: 52px;
+
+                padding:
+                    0 9px;
+            }
+
+
+            .sidebar-icon {
+
+                width: 29px;
+                height: 29px;
+
+                display: block;
             }
 
 
@@ -783,19 +1072,7 @@
             }
 
 
-            .sidebar-arrow {
-
-                width: 25px;
-                height: 25px;
-            }
-
-
-            .sidebar-icon {
-
-                width: 29px;
-                height: 29px;
-            }
-
+            /* Initial title */
 
             .central-title {
 
@@ -808,27 +1085,36 @@
             }
 
 
-            /* Change to LNS after animation */
+            /* Switch to LNS */
 
-            .intro-finished .desktop-title {
+            .intro-finished
+            .desktop-title {
+
                 display: none;
             }
 
 
-            .intro-finished .mobile-title {
+            .intro-finished
+            .mobile-title {
+
                 display: block;
             }
 
 
             /* Final mobile title */
 
-            .intro-finished .central-title {
+            .intro-finished
+            .central-title {
 
                 left: 78px;
+
                 top: 28px;
 
                 transform:
-                    translate(0, 0);
+                    translate(
+                        0,
+                        0
+                    );
 
                 font-size: 2rem;
 
@@ -838,7 +1124,7 @@
             }
 
 
-            /* Mobile search */
+            /* Search */
 
             .hero-search {
 
@@ -896,9 +1182,11 @@
 
         @media (max-width: 400px) {
 
-            .intro-finished .central-title {
+            .intro-finished
+            .central-title {
 
                 left: 70px;
+
                 top: 28px;
 
                 font-size: 1.8rem;
@@ -945,7 +1233,7 @@
     >
 
         <img
-            src="LoadingIcon.gif"
+            src="Icons/LoadingIcon.gif"
             alt="Loading"
             class="loading-icon"
         >
@@ -969,6 +1257,9 @@
             id="sidebar"
         >
 
+
+            <!-- SIDEBAR TOGGLE -->
+
             <button
                 class="sidebar-toggle"
                 id="sidebarToggle"
@@ -976,29 +1267,46 @@
                 aria-expanded="false"
             >
 
+                <!-- Main logo -->
+
                 <img
-                    class="sidebar-arrow"
-                    src="Arrow.png"
+                    src="Icons/MainIcon.png"
                     alt=""
+                    class="toggle-icon main-icon"
+                >
+
+
+                <!-- Arrow -->
+
+                <img
+                    src="Icons/Arrow.png"
+                    alt=""
+                    class="toggle-icon arrow-icon"
                 >
 
             </button>
 
 
+            <!-- SIDEBAR CONTENT -->
+
             <nav class="sidebar-content">
+
 
                 <h2>
                     LateNight Studio
                 </h2>
 
 
+                <!-- HOME -->
+
                 <a
                     href="#home"
                     class="sidebar-item"
+                    data-tooltip="Home"
                 >
 
                     <img
-                        src="HomeIcon.png"
+                        src="Icons/HomeIcon.png"
                         alt=""
                         class="sidebar-icon"
                     >
@@ -1009,17 +1317,45 @@
 
                 </a>
 
+
+                <!--
+                    ADD MORE SECTIONS LIKE THIS:
+
+                    <a
+                        href="#prototypes"
+                        class="sidebar-item"
+                        data-tooltip="Prototypes"
+                    >
+
+                        <img
+                            src="Icons/YourIcon.png"
+                            alt=""
+                            class="sidebar-icon"
+                        >
+
+                        <span>
+                            Prototypes
+                        </span>
+
+                    </a>
+                -->
+
+
             </nav>
 
         </aside>
 
 
         <!-- =====================================
-             MAIN
+             MAIN CONTENT
         ====================================== -->
 
         <main class="main-content">
 
+
+            <!-- =================================
+                 HOME
+            ================================== -->
 
             <section
                 class="hero-section"
@@ -1037,6 +1373,7 @@
                             LateNight Studio
                         </span>
 
+
                         <span class="mobile-title">
                             LNS
                         </span>
@@ -1051,7 +1388,7 @@
                     >
 
                         <img
-                            src="Search.png"
+                            src="Icons/Search.png"
                             alt=""
                             class="hero-search-icon"
                         >
@@ -1073,7 +1410,9 @@
             </section>
 
 
-            <!-- FUTURE SECTIONS -->
+            <!-- =================================
+                 FUTURE SECTIONS
+            ================================== -->
 
             <section
                 class="lower-section"
@@ -1106,7 +1445,7 @@
 
 
         /* =========================================
-           LOADING
+           ELEMENTS
         ========================================= */
 
         const loadingScreen =
@@ -1127,13 +1466,21 @@
             );
 
 
-        /*
-         * Minimum:
-         * 1 second
-         *
-         * Maximum:
-         * 10 seconds
-         */
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+        const sidebarToggle =
+            document.getElementById(
+                "sidebarToggle"
+            );
+
+
+        /* =========================================
+           LOADING SCREEN
+        ========================================= */
 
         const MIN_LOADING_TIME = 1000;
 
@@ -1160,22 +1507,21 @@
 
             const elapsed =
                 performance.now()
-                - loadingStartedAt;
+                -
+                loadingStartedAt;
 
 
             const remaining =
                 Math.max(
                     0,
-                    MIN_LOADING_TIME - elapsed
+                    MIN_LOADING_TIME
+                    -
+                    elapsed
                 );
 
 
             setTimeout(
                 function() {
-
-                    /*
-                     * Fade away loading screen.
-                     */
 
                     loadingScreen.classList.add(
                         "finished"
@@ -1184,7 +1530,7 @@
 
                     /*
                      * Wait for loading screen
-                     * fade before starting title.
+                     * fade before starting intro.
                      */
 
                     setTimeout(
@@ -1203,7 +1549,7 @@
 
 
         /* =========================================
-           WAIT FOR PAGE
+           PAGE LOADED
         ========================================= */
 
         window.addEventListener(
@@ -1217,7 +1563,7 @@
 
 
         /* =========================================
-           10 SECOND SAFETY LIMIT
+           MAXIMUM LOADING TIME
         ========================================= */
 
         setTimeout(
@@ -1241,7 +1587,7 @@
         function startIntroAnimation() {
 
             /*
-             * Title moves to top-left.
+             * Move title.
              */
 
             document.body.classList.add(
@@ -1250,7 +1596,7 @@
 
 
             /*
-             * City background fades to black.
+             * Fade city background to black.
              */
 
             heroSection.classList.add(
@@ -1259,8 +1605,8 @@
 
 
             /*
-             * Search becomes active after
-             * title movement.
+             * Focus search after
+             * title animation.
              */
 
             setTimeout(
@@ -1295,87 +1641,45 @@
 
 
         /* =========================================
-           SIDEBAR
+           SIDEBAR TOGGLE
         ========================================= */
 
-        const sidebar =
-            document.getElementById(
-                "sidebar"
-            );
-
-
-        const toggle =
-            document.getElementById(
-                "sidebarToggle"
-            );
-
-
-        const hoverDevice =
-            window.matchMedia(
-                "(hover: hover) and (pointer: fine)"
-            );
-
-
-        function updateSidebarState(
-            isOpen
-        ) {
-
-            sidebar.classList.toggle(
-                "expanded",
-                isOpen
-            );
-
-
-            toggle.setAttribute(
-                "aria-expanded",
-                isOpen
-            );
-
-
-            toggle.setAttribute(
-                "aria-label",
-                isOpen
-                    ? "Close sidebar"
-                    : "Open sidebar"
-            );
-        }
-
-
-        toggle.addEventListener(
+        sidebarToggle.addEventListener(
             "click",
             function(event) {
 
                 event.stopPropagation();
 
 
-                if (!hoverDevice.matches) {
-
-                    const isOpen =
-                        sidebar.classList.contains(
-                            "expanded"
-                        );
-
-
-                    updateSidebarState(
-                        !isOpen
+                const isExpanded =
+                    sidebar.classList.contains(
+                        "expanded"
                     );
-                }
-            }
-        );
 
 
-        hoverDevice.addEventListener(
-            "change",
-            function() {
+                sidebar.classList.toggle(
+                    "expanded"
+                );
 
-                updateSidebarState(false);
 
+                sidebarToggle.setAttribute(
+                    "aria-expanded",
+                    !isExpanded
+                );
+
+
+                sidebarToggle.setAttribute(
+                    "aria-label",
+                    !isExpanded
+                        ? "Close sidebar"
+                        : "Open sidebar"
+                );
             }
         );
 
 
         /* =========================================
-           SEARCH LIMIT
+           SEARCH
         ========================================= */
 
         searchInput.addEventListener(
@@ -1394,6 +1698,7 @@
                 }
             }
         );
+
 
     </script>
 
